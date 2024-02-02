@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Timer</title>
+        <style>
+            /* Common Css Start */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                outline: 0;
+            }
+
+            ul {
+                list-style-type: none;
+            }
+
+            a {
+                text-decoration: none;
+            }
+
+            /* Common Css End */
+            body {
+                font-family: sans-serif;
+                background: #12c2e9;
+                background: -webkit-linear-gradient(45deg, #f64f59, #c471ed, #12c2e9);
+                background: linear-gradient(45deg, #f64f59, #c471ed, #12c2e9);
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 15px;
+            }
+
+            #timer {
+                padding: 30px 15px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                background: rgba(255, 255, 255, 0.3);
+                border-radius: 15px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #timer h2 {
+                font-size: 60px;
+                color: #333;
+                text-align: center;
+            }
+
+            #timer h2 span:last-child {
+                display: block;
+                font-size: 16px;
+                text-transform: lowercase;
+                color: #444;
+            }
+
+            #timer #time_form {
+                margin-top: 15px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #timer #time_form * {
+                border: none;
+                padding: 10px 15px;
+                font-size: 20px;
+                width: 100%;
+                margin-bottom: 12px;
+            }
+
+            #timer #time_form button {
+                background-color: #12c2e9;
+                color: #fff;
+                transition: .4s;
+            }
+
+            #timer #time_form button:hover,
+            #timer #time_form button:active {
+                background-color: #f64f59;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- =========== Timer Section Start =========== -->
+        <section id="timer">
+            <div class="count_box">
+                <h2>
+                    <span id="counter">00</span>
+                    <span>seconds</span>
+                </h2>
+            </div>
+            <form id="time_form">
+                <input type="number" id="seconds" name="seconds" placeholder="Enter Seconds..." required min="0"
+                    max="60" />
+                <input type="number" id="count" name="count" placeholder="Enter Counts..." required min="0" />
+                <button type="submit">Start</button>
+            </form>
+        </section>
+        <!-- =========== Timer Section End =========== -->
+
+        <script>
+            let time_form = document.querySelector('#time_form');
+            let seconds = document.querySelector('#seconds');
+            let count = document.querySelector('#count');
+            let counter = document.querySelector('#counter');
+            let completedCountdowns = 0;
+
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            time_form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                let totalCount = parseInt(count.value);
+
+                for (let i = 1; i <= totalCount; i++) {
+                    let delay = 0;
+
+                    if (i > 1) {
+                        delay = 5000 + seconds.value * 1000;
+                    }
+
+                    await sleep(delay);
+                    start(i);
+                }
+
+                // Trigger reload only once after all countdowns
+                setTimeout(() => {
+                    if (completedCountdowns === totalCount) {
+                        location.reload();
+                    }
+                }, 1000);
+            });
+
+            function start(index) {
+                let seconds_value = parseInt(seconds.value);
+                let interval = setInterval(() => {
+                    if (seconds_value <= 60 && seconds_value >= 0) {
+                        counter.innerText = seconds_value--;
+                    }
+                    if (counter.innerText == '0') {
+                        clearInterval(interval);
+                        let audio = new Audio("https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3");
+                        audio.play();
+                        completedCountdowns++;
+                    }
+                }, 1000);
+            }
+        </script>
+    </body>
+
+</html>
