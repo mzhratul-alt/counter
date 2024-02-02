@@ -124,7 +124,7 @@
                     let delay = 0;
 
                     if (i > 1) {
-                        delay = 5000 + seconds.value * 1000;
+                        delay = 2000 + seconds.value * 1000;
                     }
 
                     await sleep(delay);
@@ -147,7 +147,7 @@
                     }
                     if (counter.innerText == '0') {
                         clearInterval(interval);
-                        let audio = new Audio("https://assets.mixkit.co/active_storage/sfx/995/995-preview.mp3");
+                        let audio = new Audio("https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3");
                         audio.play();
                         completedCountdowns++;
                     }
